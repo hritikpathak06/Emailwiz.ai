@@ -17,17 +17,14 @@ const Page = () => {
     const fetchTemplates = async () => {
       const data: any = await getAllTemplates();
 
-      console.log("Data===>> ", data[2].design);
-
       setTemplates(data);
     };
 
     fetchTemplates();
   }, []);
 
-  if (!user) return <div>Loading...</div>; 
-  if (!templates.length) return <div>Loading templates...</div>; 
-
+  if (!user) return <div>Loading...</div>;
+  if (!templates.length) return <div>Loading templates...</div>;
 
   return (
     <>
@@ -50,7 +47,9 @@ const Page = () => {
               </Button>
             </div>
             <h2 className="text-2xl font-bold">My WorkSpace</h2>
-            <MyTemplates />
+            {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6"> */}
+            <MyTemplates templates={templates} />
+            {/* </div> */}
           </div>
         </div>
       </div>

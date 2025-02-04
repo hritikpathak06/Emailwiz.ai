@@ -4,8 +4,9 @@ import { useManageScreenSize } from "@/context/ScreenSizeContext";
 import React, { useEffect, useRef, useState } from "react";
 import Column from "./Column";
 import HtmlDialog from "./HtmlDialog";
+import { useHtmlCode } from "@/context/HtmlCodeGenerator";
 
-const Canvas = ({ viewHTMLCode,closeDialog }: any) => {
+const Canvas = ({ viewHTMLCode, closeDialog }: any) => {
   const { screenSize } = useManageScreenSize();
   const {
     dragElementLayout,
@@ -15,7 +16,7 @@ const Canvas = ({ viewHTMLCode,closeDialog }: any) => {
   } = useDragDrop();
 
   const [dragOver, setDragOver] = useState<boolean>(false);
-  const[htmlCode,setHtmlCode] = useState()
+  const { htmlCode, setHtmlCode } = useHtmlCode();
 
   const htmlRef = useRef<any>(null);
 
@@ -66,7 +67,11 @@ const Canvas = ({ viewHTMLCode,closeDialog }: any) => {
             );
           })}
         </div>
-        <HtmlDialog openDialog={viewHTMLCode} htmlCode={htmlCode} closeDialog={closeDialog}/>
+        <HtmlDialog
+          openDialog={viewHTMLCode}
+          htmlCode={htmlCode}
+          closeDialog={closeDialog}
+        />
       </div>
     </>
   );

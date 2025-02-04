@@ -1,5 +1,6 @@
 import EditorHeader from "@/components/client/Editor/EditorHeader";
 import { DragDropProvider } from "@/context/DragDropContext";
+import { HtmlCodeGeneratorProvider } from "@/context/HtmlCodeGenerator";
 import { ScreenSizeProvider } from "@/context/ScreenSizeContext";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -26,15 +27,17 @@ export default function RootLayout({
 }>) {
   return (
     <ScreenSizeProvider>
-      <DragDropProvider>
-        <html lang="en">
-          <body
-            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-          >
-            {children}
-          </body>
-        </html>
-      </DragDropProvider>
+      <HtmlCodeGeneratorProvider>
+        <DragDropProvider>
+          <html lang="en">
+            <body
+              className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+            >
+              {children}
+            </body>
+          </html>
+        </DragDropProvider>
+      </HtmlCodeGeneratorProvider>
     </ScreenSizeProvider>
   );
 }

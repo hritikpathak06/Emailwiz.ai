@@ -10,12 +10,12 @@ import React, { useEffect, useState } from "react";
 
 const Page = () => {
   const [viewHTMLCode, setViewHTMLCode] = useState<any>(null);
-  const { templateId } = typeof window !== "undefined" ? useParams() : { templateId: null }; // Prevent SSR issue
+  const { templateId } =
+    typeof window !== "undefined" ? useParams() : { templateId: null };
 
   const { emailTemplate, setEmailTemplate } = useDragDrop();
 
   useEffect(() => {
-    // Ensure this runs only in the browser (client-side)
     if (typeof window === "undefined") return;
 
     if (!templateId) {
@@ -33,7 +33,9 @@ const Page = () => {
         let cleanedDesign = design;
 
         if (typeof cleanedDesign === "string") {
-          cleanedDesign = cleanedDesign.replace(/^```json\s+/g, "").replace(/\s+```$/, ""); // Remove ```json wrapper
+          cleanedDesign = cleanedDesign
+            .replace(/^```json\s+/g, "")
+            .replace(/\s+```$/, "");
           try {
             const parsedDesign = JSON.parse(cleanedDesign);
             console.log("Parsed Design ==>>> ", parsedDesign);
@@ -60,7 +62,10 @@ const Page = () => {
             <Sidebar />
           </div>
           <div className="col-span-3 max-h-[90vh] overflow-auto bg-gray-200">
-            <Canvas viewHTMLCode={viewHTMLCode} closeDialog={() => setViewHTMLCode(null)} />
+            <Canvas
+              viewHTMLCode={viewHTMLCode}
+              closeDialog={() => setViewHTMLCode(null)}
+            />
           </div>
           <div className="max-h-[90vh] overflow-auto">
             <Settings />
