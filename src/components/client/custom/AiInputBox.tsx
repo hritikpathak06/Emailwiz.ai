@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import data from "../../../lib/prompt";
 import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { useRouter } from "next/navigation";
 
 interface AiInputBoxProps {
   user: {
@@ -18,6 +19,7 @@ interface AiInputBoxProps {
 const AiInputBox: React.FC<AiInputBoxProps> = ({ user }) => {
   const [userInput, setUserInput] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
 
   console.log("User===>> ", user);
 
@@ -41,6 +43,7 @@ const AiInputBox: React.FC<AiInputBoxProps> = ({ user }) => {
       const response = await generate_ai_response(payload);
       console.log("AI Response:", response);
       setUserInput("");
+      router.push(`/editor/${response.tid}`);
     } catch (error) {
       console.error("Error generating AI response:", error);
     } finally {

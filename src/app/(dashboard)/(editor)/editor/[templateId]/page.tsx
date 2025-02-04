@@ -8,15 +8,16 @@ import { useDragDrop } from "@/context/DragDropContext";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-const page = () => {
-  const [viewHTMLCode, setViewHTMLCode] = useState();
-  const { templateId } = useParams();
+const Page = () => {
+  const [viewHTMLCode, setViewHTMLCode] = useState<any>(null);
+  const { templateId } = typeof window !== "undefined" ? useParams() : { templateId: null }; // Prevent SSR issue
 
-  const [template, setTemplate] = useState({});
   const { emailTemplate, setEmailTemplate } = useDragDrop();
 
   useEffect(() => {
-    // Ensure templateId is valid before calling the API
+    // Ensure this runs only in the browser (client-side)
+    if (typeof window === "undefined") return;
+
     if (!templateId) {
       console.warn("templateId is undefined or invalid.");
       return;
@@ -25,33 +26,26 @@ const page = () => {
     const fetchTemplate = async () => {
       try {
         console.log("Template id ==>> ", templateId);
-    
-        const data: any = await getSingleTemplate(templateId); // Fetch the template
+
+        const data: any = await getSingleTemplate(templateId);
         const { design } = data;
-    
-        // Remove the surrounding ```json and parse it if necessary
+
         let cleanedDesign = design;
-    
-        // Remove the ```json``` wrapper if it exists
+
         if (typeof cleanedDesign === "string") {
-          cleanedDesign = cleanedDesign.replace(/^```json\s+/g, '').replace(/\s+```$/, '');  // Removing both the starting and ending ```json
+          cleanedDesign = cleanedDesign.replace(/^```json\s+/g, "").replace(/\s+```$/, ""); // Remove ```json wrapper
           try {
-            // Now, parse the cleaned design string into an array
             const parsedDesign = JSON.parse(cleanedDesign);
             console.log("Parsed Design ==>>> ", parsedDesign);
-            setEmailTemplate(parsedDesign)
-            // Example: set the design in state (emailTemplates)
-            // setEmailTemplates(parsedDesign);
+            setEmailTemplate(parsedDesign);
           } catch (parseError) {
             console.error("Failed to parse cleaned design JSON:", parseError);
           }
         }
-    
       } catch (error) {
         console.error("Failed to fetch the template:", error);
       }
     };
-    
 
     fetchTemplate();
   }, [templateId]);
@@ -61,17 +55,14 @@ const page = () => {
       <div>
         <EditorHeader viewHTMLCode={(v: any) => setViewHTMLCode(v)} />
 
-        <div className=" grid  grid-cols-5 ">
-          <div className=" max-h-[90vh] overflow-auto">
+        <div className="grid grid-cols-5">
+          <div className="max-h-[90vh] overflow-auto">
             <Sidebar />
           </div>
           <div className="col-span-3 max-h-[90vh] overflow-auto bg-gray-200">
-            <Canvas
-              viewHTMLCode={viewHTMLCode}
-              closeDialog={() => setViewHTMLCode(false as any)}
-            />
+            <Canvas viewHTMLCode={viewHTMLCode} closeDialog={() => setViewHTMLCode(null)} />
           </div>
-          <div className=" max-h-[90vh] overflow-auto">
+          <div className="max-h-[90vh] overflow-auto">
             <Settings />
           </div>
         </div>
@@ -80,4 +71,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

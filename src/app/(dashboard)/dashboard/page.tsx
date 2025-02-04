@@ -4,29 +4,30 @@ import MyTemplates from "@/components/client/Dashboard/MyTemplates";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@clerk/nextjs";
 import { PlusIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const Page = () => {
   const { user } = useUser();
+  const router = useRouter();
 
-  const [templates, setTemplates] = useState<any>([]); 
+  const [templates, setTemplates] = useState<any>([]);
 
   useEffect(() => {
     const fetchTemplates = async () => {
       const data: any = await getAllTemplates();
 
-     console.log("Data===>> ",data[2].design);
+      console.log("Data===>> ", data[2].design);
 
-      setTemplates(data); 
+      setTemplates(data);
     };
 
     fetchTemplates();
-  }, []); 
+  }, []);
 
-  if (!user) return <div>Loading...</div>; // Add a loading state for when the user data is not available
-  if (!templates.length) return <div>Loading templates...</div>; // Add loading state for templates
+  if (!user) return <div>Loading...</div>; 
+  if (!templates.length) return <div>Loading templates...</div>; 
 
-  // console.log("templates==>> ", templates);
 
   return (
     <>
@@ -40,7 +41,10 @@ const Page = () => {
                   {user?.firstName} {user?.lastName}
                 </span>
               </h2>
-              <Button className="flex items-center gap-2">
+              <Button
+                className="flex items-center gap-2"
+                onClick={() => router.push("/create")}
+              >
                 <PlusIcon className="h-4 w-4" />
                 Create New
               </Button>

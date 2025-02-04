@@ -1,10 +1,13 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 const MyTemplates = () => {
   const [myTemplatesList, setMyTemplatesList] = useState([]);
+  const router = useRouter();
   return (
     <>
       <div>
@@ -17,7 +20,10 @@ const MyTemplates = () => {
                 width={400}
                 alt="no-data"
               />
-              <Button className="flex items-center gap-2">
+              <Button
+                className="flex items-center gap-2"
+                onClick={() => router.push("/create")}
+              >
                 <PlusIcon className="h-4 w-4" />
                 Create New
               </Button>
